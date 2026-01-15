@@ -1,0 +1,17 @@
+---
+Language: Cpp
+Standard: Latest
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 100
+SortIncludes: true
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AllowShortFunctionsOnASingleLine: Empty
+KeepEmptyLinesAtTheStartOfBlocks: false
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+TabWidth: 4
+UseTab: Never

@@ -1,0 +1,102 @@
+/*
+ * GameUiState.kt: UI state data classes for the game
+ *
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: Copyright (C) 2024-2025 KeenKenning Contributors
+ */
+
+package com.oichkatzelesfrettschen.keenclassik.ui
+
+import com.oichkatzelesfrettschen.keenclassik.data.GameMode
+
+/**
+ * Colorblind accessibility modes.
+ * Each mode provides optimized color palettes for specific types of color vision deficiency.
+ */
+enum class ColorblindMode(val displayName: String, val description: String) {
+    NORMAL("Normal", "Standard colors"),
+    DEUTERANOPIA("Deuteranopia", "Green-blind friendly"),
+    PROTANOPIA("Protanopia", "Red-blind friendly"),
+    TRITANOPIA("Tritanopia", "Blue-blind friendly"),
+    TETARTANOPIA("Tetartanopia", "Hypothetical fourth cone deficiency"),
+    ACHROMATOPSIA("Achromatopsia", "Monochrome high-luminance"),
+    HIGH_CONTRAST("High Contrast", "Maximum visibility")
+}
+
+enum class LayoutPreset { Compact, Medium, Spacious }
+
+data class GameUiState(
+    val size: Int = 0,
+    val cells: List<List<UiCell>> = emptyList(),
+    val zones: List<UiZone> = emptyList(),
+    val activeCell: Pair<Int, Int>? = null,
+    val isSolved: Boolean = false,
+    val isInputtingNotes: Boolean = false,
+    val isLoading: Boolean = false,
+    val showInfoDialog: Boolean = false,
+    val showVictoryAnimation: Boolean = false,  // Solitaire-style bounce animation
+    val victoryAnimationComplete: Boolean = false,
+    // Timer and game metadata
+    val elapsedTimeSeconds: Long = 0,
+    val timerRunning: Boolean = false,
+    val difficulty: Int = 0,  // 0=Easy, 1=Normal, 2=Hard, 3=Extreme
+    val difficultyName: String = "Easy",
+    // Settings
+    val showSettingsDialog: Boolean = false,
+    val darkTheme: Boolean = true,  // Default dark theme
+    val fontScale: Float = 1.0f,   // 1.0 = normal, 1.25 = large, 1.5 = extra large
+    val showTimer: Boolean = true,  // Allow hiding timer to reduce anxiety
+    val immersiveMode: Boolean = false,  // Full-screen immersive (auto-hide UI)
+    val uiVisible: Boolean = true,  // TopBar/BottomBar visibility state
+    val colorblindMode: ColorblindMode = ColorblindMode.NORMAL,  // Accessibility: colorblind support
+    val layoutPreset: LayoutPreset = LayoutPreset.Medium,  // Grid vs controls balance
+    // Save/Load
+    val showSaveDialog: Boolean = false,
+    val showLoadDialog: Boolean = false,
+    // Game mode (Classik uses Standard only)
+    val gameMode: GameMode = GameMode.STANDARD,
+    // Hint system
+    val showHintDialog: Boolean = false,
+    val currentHint: HintInfo? = null,
+    val hintsUsed: Int = 0,
+    // Error handling for generation failures
+    val showErrorDialog: Boolean = false,
+    val errorMessage: String? = null
+)
+
+/**
+ * Information about a hint for the current cell.
+ * Hint metadata for the current puzzle.
+ */
+data class HintInfo(
+    val suggestedDigit: Int,
+    val confidence: Float,  // 0.0-1.0, higher = more certain
+    val reasoning: String,  // Human-readable explanation
+    val cellX: Int,
+    val cellY: Int
+)
+
+data class UiCell(
+    val x: Int,
+    val y: Int,
+    val value: Int?,
+    val notes: List<Boolean>, 
+    val zoneId: Int,
+    val isSelected: Boolean,
+    val borders: CellBorders = CellBorders(),
+    val clue: String? = null,
+    val errorFlags: Int = 0
+)
+
+data class CellBorders(
+    val top: Boolean = false,
+    val bottom: Boolean = false,
+    val left: Boolean = false,
+    val right: Boolean = false
+)
+
+data class UiZone(
+    val id: Int,
+    val label: String,
+    val color: Long
+)

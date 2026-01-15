@@ -1,0 +1,63 @@
+# Build artifacts
+/build
+**/build/
+/captures
+*.apk
+*.aab
+
+# IDE and OS
+.DS_Store
+.gradle
+/.idea/caches/
+/.idea/codeStyles/
+/.idea/libraries
+/.idea/tasks.xml
+/.idea/workspace.xml
+*.iml
+.project
+.classpath
+.settings/
+
+# Local configuration
+/local.properties
+
+# ML artifacts (large binary files)
+*.npz
+*.pth
+*.onnx
+*.onnx.data
+
+# Tool configs (user-specific)
+.gemini/
+gha-creds-*.json
+
+# Logs and audit files
+logs/
+perf.data
+perf.data.old
+*.profraw
+*.profdata
+*gcov.json.gz
+
+# Core dumps
+core.*
+
+# Build/Environment
+.cxx/
+/app/.cxx/
+.venv/
+__pycache__/
+*.pyc
+
+# Database files
+*.db
+
+# Backup/archive directories
+projectFilesBackup/
+
+# Local third-party snapshots (license-sensitive)
+docs/third_party/keenforandroid/
+docs/analysis/keen_generator_metrics.txt
+
+# Claude Code local settings (user-specific)
+.claude/

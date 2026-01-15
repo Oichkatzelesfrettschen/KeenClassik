@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Keen Classik Theme Palette -->
+    <color name="colorPrimary">#4F46E5</color> <!-- Indigo 600 -->
+    <color name="colorPrimaryDark">#3730A3</color> <!-- Indigo 700 -->
+    <color name="colorAccent">#C026D3</color> <!-- Magenta 600 -->
+
+    <color name="background_deep">#0A0A0A</color>
+    <color name="surface_dark">#1E1E1E</color>
+    <color name="text_primary">#E0E0E0</color>
+</resources>

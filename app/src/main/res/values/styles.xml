@@ -1,0 +1,19 @@
+<resources>
+
+    <declare-styleable name="CTAppTheme">
+        <attr name="primaryTextColor" format="color"/>
+        <attr name="dividerColor" format="color"/>
+        <attr name="backgroundCardColor" format="color"/>
+    </declare-styleable>
+
+    <!-- Base application theme using Keen Classik Indigo-Magenta palette -->
+    <style name="AppTheme.Base.Light" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/background_deep</item>
+        <item name="primaryTextColor">@color/text_primary</item>
+        <item name="backgroundCardColor">@color/surface_dark</item>
+    </style>
+
+</resources>
