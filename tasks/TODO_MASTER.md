@@ -5,8 +5,8 @@
 - [x] **Unit Tests**: `./gradlew testDebugUnitTest` (run with JDK 21).
 - [x] **Instrumented Tests**: `./gradlew connectedDebugAndroidTest`.
 - [x] **Lint Zeroing**: `./gradlew lintDebug` (warnings are errors, JDK 21).
-- [ ] **Build Profiling**: capture `--profile`, configuration cache, build cache behavior.
-- [ ] **Dependency Audit**: verify versions and suppress unresolvable upgrades (SDK 36 constraint).
+- [x] **Build Profiling**: capture `--profile`, configuration cache, build cache behavior.
+- [x] **Dependency Audit**: verify versions and suppress unresolvable upgrades (SDK 36 constraint).
 - [x] **Gradle Strictness**: `org.gradle.warning.mode=fail` and configuration-cache problems set to fail.
 - [x] **Machine-Specific Paths**: keep `org.gradle.java.home` out of git; use local properties.
 
@@ -40,7 +40,7 @@
 - [ ] **Legacy Theme Pass**: High-DPI/modern layout with classic rules.
 - [x] **Difficulty Stability Tests**: Profile bounds tests + native clue-cap regression harness.
 - [x] **Legacy Snapshot Scripts**: Fetch KeenForAndroid C snapshot and generate comparison report.
-- [ ] **Legacy Heuristic Translation**: Document domino-first heuristics and map to C23 implementation.
+- [x] **Legacy Heuristic Translation**: Document domino-first heuristics and map to C23 implementation.
 
 ## IV. Performance & Instrumentation
 - [x] **Sanitizers**: document and wire `keenSanitizers`, `keenCoverage`, `keenFuncTrace` in Gradle properties.
@@ -48,7 +48,7 @@
 - [x] **Coverage**: gcovr workflow for native code (host or device build).
 - [x] **Valgrind/Heaptrack**: host-native memcheck and heaptrack instructions documented.
 - [x] **Infer**: static analysis workflow (see `~/Documents/Code-Analysis-Tooling`).
-- [ ] **Perfetto/Tracing**: capture CPU/GPU traces for puzzle generation and rendering.
+- [x] **Perfetto/Tracing**: capture CPU/GPU traces for puzzle generation and rendering.
 
 ## V. Emulator & UI Automation
 - [x] **Headless Emulator**: boot script + readiness checks (system_server + package service).
@@ -61,15 +61,15 @@
 - [x] **Logging Hooks**: structured logs for perf and crash triage.
 
 ## VII. Quality & Validation
-- [ ] **JNI Security Audit**: Implement boundary checks for grid arrays.
+- [x] **JNI Security Audit**: Implement boundary checks for grid arrays.
 - [x] **Settings Persistence**: Persist dark theme toggle in SharedPreferences.
 - [x] **UI Validation Integration**: Wire `KeenValidator` error highlights into Compose UI.
 - [x] **Hint Integration**: Wire `KeenHints` into UI with progressive hints.
-- [ ] **D-pad Navigation**: refine Android TV focus traversal and D-pad input flow.
+- [x] **D-pad Navigation**: refine Android TV focus traversal and D-pad input flow.
 - [x] **Adaptive Difficulty Removed**: Classik scope keeps fixed 0-3 ladder (no adaptive modes).
-- [ ] **Unit Testing**:
-    - [ ] C: Test maxflow correctness vs brute force.
-    - [ ] Java: Robolectric tests for `KeenModel` state transitions.
+- [x] **Unit Testing**:
+    - [x] C: Test maxflow correctness vs brute force.
+    - [x] Java: Robolectric tests for `KeenModel` state transitions.
 - [ ] **Game Engine Refactor**: Extract `KeenController` into standalone logic unit.
 
 ## VIII. Documentation & Roadmap Alignment

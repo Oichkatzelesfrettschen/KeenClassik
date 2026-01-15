@@ -22,15 +22,11 @@ object PerfTrace {
      */
     inline fun <T> section(name: String, block: () -> T): T {
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                Trace.beginSection(name)
-            }
+            Trace.beginSection(name)
             try {
                 block()
             } finally {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    Trace.endSection()
-                }
+                Trace.endSection()
             }
         } catch (e: RuntimeException) {
             // JVM unit tests: Trace.beginSection throws when android.os.Trace is mocked

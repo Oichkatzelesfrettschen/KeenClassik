@@ -39,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -2025,7 +2026,7 @@ private fun SaveLoadDialog(
     onDismiss: () -> Unit
 ) {
     var showDeleteConfirm by remember { mutableStateOf<Int?>(null) }
-    var refreshTrigger by remember { mutableStateOf(0) }
+    var refreshTrigger by remember { mutableIntStateOf(0) }
 
     // Fetch fresh slots each time trigger changes (e.g., after delete)
     val currentSlots = remember(refreshTrigger) { onFetchSlots() }

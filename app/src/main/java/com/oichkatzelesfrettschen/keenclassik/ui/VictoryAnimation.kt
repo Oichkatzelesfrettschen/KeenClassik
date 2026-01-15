@@ -134,11 +134,11 @@ fun VictoryAnimation(
     // Animation state
     var animationStarted by remember { mutableStateOf(false) }
     var showFinalMessage by remember { mutableStateOf(false) }
-    var lastFrameTime by remember { mutableStateOf(0L) }
-    var lastTrailTime by remember { mutableStateOf(0L) }
+    var lastFrameTime by remember { mutableLongStateOf(0L) }
+    var lastTrailTime by remember { mutableLongStateOf(0L) }
 
     // Staggered tile launch
-    var launchedTiles by remember { mutableStateOf(0) }
+    var launchedTiles by remember { mutableIntStateOf(0) }
 
     // Launch tiles with stagger
     LaunchedEffect(Unit) {
