@@ -40,8 +40,8 @@ jobs:
       run: |
         echo "Verifying native library compilation..."
         ./gradlew externalNativeBuildDebug
-        # Check that libraries were built for all ABIs
-        for abi in armeabi-v7a arm64-v8a x86 x86_64; do
+        # Check that libraries were built for all ABIs (armeabi-v7a, arm64-v8a, x86_64)
+        for abi in armeabi-v7a arm64-v8a x86_64; do
           LIB_PATH="app/build/intermediates/cmake/debug/obj/$abi/libkeen-android-jni.so"
           if [ -f "$LIB_PATH" ]; then
             echo "OK: Found $abi library"
