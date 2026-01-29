@@ -35,10 +35,10 @@ class SaveManagerProfileTest {
         val model = buildModel(3)
         val profileName = KeenProfile.CLASSIK_LEGACY.name
 
-        val saved = saveManager.saveToSlot(0, model, "Easy", profileName, 42L)
+        val saved = saveManager.saveToSlot(0, model, "Easy", profileName = profileName, elapsedSeconds = 42L)
         assertTrue(saved)
 
-        val (loaded, elapsed, loadedProfile) = saveManager.loadFromSlot(0)
+        val (loaded, elapsed, modeName, loadedProfile) = saveManager.loadFromSlot(0)
         assertNotNull(loaded)
         assertEquals(3, loaded!!.size)
         assertEquals(42L, elapsed)
@@ -50,9 +50,9 @@ class SaveManagerProfileTest {
         val model = buildModel(4)
         val profileName = KeenProfile.CLASSIK_MODERN.name
 
-        saveManager.saveAutoSave(model, "Normal", profileName, 1337L)
+        saveManager.saveAutoSave(model, "Normal", profileName = profileName, elapsedSeconds = 1337L)
 
-        val (loaded, elapsed, loadedProfile) = saveManager.loadAutoSave()
+        val (loaded, elapsed, modeName, loadedProfile) = saveManager.loadAutoSave()
         assertNotNull(loaded)
         assertEquals(4, loaded!!.size)
         assertEquals(1337L, elapsed)
