@@ -104,7 +104,7 @@ class GameModeTest {
     fun `mode cFlags are distinct`() {
         val modes = GameMode.allModes()
         val cFlags = modes.map { it.cFlags }.toSet()
-        assertEquals(modes.size, cFlags.size, "Each mode should have unique cFlags")
+        assertEquals("Each mode should have unique cFlags", modes.size, cFlags.size)
     }
 
     @Test
@@ -119,14 +119,14 @@ class GameModeTest {
     @Test
     fun `all phase 1 modes are marked as implemented`() {
         val phase1Modes = GameMode.byPhase(1)
-        assertTrue(phase1Modes.all { it.implemented },
-                   "All phase 1 modes should be implemented")
+        assertTrue("All phase 1 modes should be implemented",
+                   phase1Modes.all { it.implemented })
     }
 
     @Test
     fun `mode display names are distinct`() {
         val modes = GameMode.allModes()
         val names = modes.map { it.displayName }.toSet()
-        assertEquals(modes.size, names.size, "Each mode should have unique display name")
+        assertEquals("Each mode should have unique display name", modes.size, names.size)
     }
 }
