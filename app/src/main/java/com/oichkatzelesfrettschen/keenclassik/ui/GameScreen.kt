@@ -245,6 +245,7 @@ fun GameScreen(
                             onMenuClick = onMenuClick,
                             gridSize = uiState.size,
                             difficultyName = uiState.difficultyName,
+                            gameMode = uiState.gameMode,
                             elapsedSeconds = uiState.elapsedTimeSeconds,
                             showTimer = uiState.showTimer
                         )
@@ -636,6 +637,7 @@ private fun TopBar(
     onMenuClick: (() -> Unit)? = null,
     gridSize: Int = 0,
     difficultyName: String = "Easy",
+    gameMode: GameMode = GameMode.STANDARD,
     elapsedSeconds: Long = 0,
     showTimer: Boolean = true  // New: allow hiding timer to reduce anxiety
 ) {
@@ -697,6 +699,22 @@ private fun TopBar(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White.copy(alpha = 0.9f)
+                    )
+                }
+            }
+
+            // Mode badge (only show if not standard)
+            if (gameMode != GameMode.STANDARD) {
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = Color(0xFF4A148C)  // Deep purple for mode distinction
+                ) {
+                    Text(
+                        text = gameMode.displayName,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
                     )
                 }
             }

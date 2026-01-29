@@ -57,16 +57,18 @@ class SaveManager(context: Context) {
         private const val KEY_MODEL_PREFIX = "slot_model_"
         private const val KEY_SIZE_PREFIX = "slot_size_"
         private const val KEY_DIFF_PREFIX = "slot_diff_"
+        private const val KEY_MODE_PREFIX = "slot_mode_"
         private const val KEY_PROFILE_PREFIX = "slot_profile_"
         private const val KEY_TIME_PREFIX = "slot_time_"
         private const val KEY_ELAPSED_PREFIX = "slot_elapsed_"
         private const val KEY_SOLVED_PREFIX = "slot_solved_"
-        
+
         // Auto-save keys for implicit persistence
         private const val KEY_AUTOSAVE_MODEL = "autosave_model"
         private const val KEY_AUTOSAVE_ELAPSED = "autosave_elapsed"
         private const val KEY_AUTOSAVE_TIMESTAMP = "autosave_timestamp"
         private const val KEY_AUTOSAVE_DIFF_NAME = "autosave_diff_name"
+        private const val KEY_AUTOSAVE_MODE_NAME = "autosave_mode_name"
         private const val KEY_AUTOSAVE_PROFILE_NAME = "autosave_profile_name"
     }
 
@@ -112,6 +114,7 @@ class SaveManager(context: Context) {
         slotIndex: Int,
         model: KeenModel,
         difficultyName: String,
+        modeName: String = GameMode.STANDARD.name,
         profileName: String,
         elapsedSeconds: Long
     ): Boolean {
@@ -123,6 +126,7 @@ class SaveManager(context: Context) {
                 putString("$KEY_MODEL_PREFIX$slotIndex", modelJson)
                 putInt("$KEY_SIZE_PREFIX$slotIndex", model.size)
                 putString("$KEY_DIFF_PREFIX$slotIndex", difficultyName)
+                putString("$KEY_MODE_PREFIX$slotIndex", modeName)
                 putString("$KEY_PROFILE_PREFIX$slotIndex", profileName)
                 putLong("$KEY_TIME_PREFIX$slotIndex", System.currentTimeMillis())
                 putLong("$KEY_ELAPSED_PREFIX$slotIndex", elapsedSeconds)
@@ -137,22 +141,35 @@ class SaveManager(context: Context) {
 
     /**
      * Load a game from a specific slot
+     * @return Quadruple of (model, elapsed time, mode name, profile name)
      */
-    fun loadFromSlot(slotIndex: Int): Triple<KeenModel?, Long, String> {
-        if (slotIndex < 0 || slotIndex >= MAX_SLOTS) return Triple(null, 0, "")
+    data class LoadResult(
+        val model: KeenModel?,
+        val elapsedSeconds: Long,
+        val modeName: String,
+        val profileName: String
+    )
+
+    fun loadFromSlot(slotIndex: Int): LoadResult {
+        if (slotIndex < 0 || slotIndex >= MAX_SLOTS) {
+            return LoadResult(null, 0, GameMode.STANDARD.name, "")
+        }
 
         val modelJson = prefs.getString("$KEY_MODEL_PREFIX$slotIndex", null)
-        if (modelJson.isNullOrEmpty()) return Triple(null, 0, "")
+        if (modelJson.isNullOrEmpty()) {
+            return LoadResult(null, 0, GameMode.STANDARD.name, "")
+        }
 
         return try {
             val model = gson.fromJson(modelJson, KeenModel::class.java)
             model.ensureInitialized()
             val elapsed = prefs.getLong("$KEY_ELAPSED_PREFIX$slotIndex", 0)
+            val modeName = prefs.getString("$KEY_MODE_PREFIX$slotIndex", null) ?: GameMode.STANDARD.name
             val profileName = prefs.getString("$KEY_PROFILE_PREFIX$slotIndex", "") ?: ""
-            Triple(model, elapsed, profileName)
+            LoadResult(model, elapsed, modeName, profileName)
         } catch (e: Exception) {
             e.printStackTrace()
-            Triple(null, 0, "")
+            LoadResult(null, 0, GameMode.STANDARD.name, "")
         }
     }
 
@@ -162,6 +179,7 @@ class SaveManager(context: Context) {
     fun saveAutoSave(
         model: KeenModel,
         difficultyName: String,
+        modeName: String = GameMode.STANDARD.name,
         profileName: String,
         elapsedSeconds: Long
     ) {
@@ -170,6 +188,7 @@ class SaveManager(context: Context) {
             prefs.edit {
                 putString(KEY_AUTOSAVE_MODEL, modelJson)
                 putString(KEY_AUTOSAVE_DIFF_NAME, difficultyName)
+                putString(KEY_AUTOSAVE_MODE_NAME, modeName)
                 putString(KEY_AUTOSAVE_PROFILE_NAME, profileName)
                 putLong(KEY_AUTOSAVE_TIMESTAMP, System.currentTimeMillis())
                 putLong(KEY_AUTOSAVE_ELAPSED, elapsedSeconds)
@@ -182,19 +201,22 @@ class SaveManager(context: Context) {
     /**
      * Load the auto-saved game state
      */
-    fun loadAutoSave(): Triple<KeenModel?, Long, String> {
+    fun loadAutoSave(): LoadResult {
         val modelJson = prefs.getString(KEY_AUTOSAVE_MODEL, null)
-        if (modelJson.isNullOrEmpty()) return Triple(null, 0, "")
+        if (modelJson.isNullOrEmpty()) {
+            return LoadResult(null, 0, GameMode.STANDARD.name, "")
+        }
 
         return try {
             val model = gson.fromJson(modelJson, KeenModel::class.java)
             model.ensureInitialized()
             val elapsed = prefs.getLong(KEY_AUTOSAVE_ELAPSED, 0)
+            val modeName = prefs.getString(KEY_AUTOSAVE_MODE_NAME, null) ?: GameMode.STANDARD.name
             val profileName = prefs.getString(KEY_AUTOSAVE_PROFILE_NAME, "") ?: ""
-            Triple(model, elapsed, profileName)
+            LoadResult(model, elapsed, modeName, profileName)
         } catch (e: Exception) {
             e.printStackTrace()
-            Triple(null, 0, "")
+            LoadResult(null, 0, GameMode.STANDARD.name, "")
         }
     }
 
@@ -215,6 +237,7 @@ class SaveManager(context: Context) {
             remove("$KEY_MODEL_PREFIX$slotIndex")
             remove("$KEY_SIZE_PREFIX$slotIndex")
             remove("$KEY_DIFF_PREFIX$slotIndex")
+            remove("$KEY_MODE_PREFIX$slotIndex")
             remove("$KEY_PROFILE_PREFIX$slotIndex")
             remove("$KEY_TIME_PREFIX$slotIndex")
             remove("$KEY_ELAPSED_PREFIX$slotIndex")

@@ -21,7 +21,7 @@ enum class KeenProfile(
         minGridSize = 3,
         maxGridSize = 9,
         maxDifficulty = Difficulty.EXTREME,
-        standardOnly = true
+        standardOnly = false  // Allows STANDARD and MULTIPLICATION_ONLY
     ),
     CLASSIK_LEGACY(
         displayName = "Classik (Legacy)",
@@ -29,7 +29,7 @@ enum class KeenProfile(
         minGridSize = 3,
         maxGridSize = 9,
         maxDifficulty = Difficulty.EXTREME,
-        standardOnly = true
+        standardOnly = false  // Allows STANDARD and MULTIPLICATION_ONLY
     );
 
     fun supportsSize(size: Int): Boolean = size in minGridSize..maxGridSize
@@ -39,7 +39,10 @@ enum class KeenProfile(
 
     fun clampDifficulty(diff: Int): Int = diff.coerceIn(Difficulty.EASY.level, maxDifficulty.level)
 
-    fun allowsMode(mode: GameMode): Boolean = !standardOnly || mode == GameMode.STANDARD
+    fun allowsMode(mode: GameMode): Boolean {
+        // Classik profiles allow STANDARD and MULTIPLICATION_ONLY only
+        return mode == GameMode.STANDARD || mode == GameMode.MULTIPLICATION_ONLY
+    }
 
     companion object {
         @JvmField

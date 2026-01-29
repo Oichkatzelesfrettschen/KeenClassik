@@ -93,13 +93,19 @@ JNIEXPORT jstring JNICALL Java_com_oichkatzelesfrettschen_keenclassik_KeenModelB
         return retval;
     }
 
-    if (keen_profile_is_classik(profileId) &&
-        (modeFlags != MODE_STANDARD || multOnly != 0)) {
-        char* err = jni_make_error(JNI_ERR_INVALID_MODES,
-                                   "Classik profiles only support Standard mode");
-        jstring retval = (*env)->NewStringUTF(env, err);
-        sfree(err);
-        return retval;
+    if (keen_profile_is_classik(profileId)) {
+        /* Classik allows STANDARD (modeFlags=0, multOnly=0) or
+         * MULTIPLICATION_ONLY (modeFlags=MODE_MULT_ONLY, multOnly=1) */
+        bool valid_standard = (modeFlags == MODE_STANDARD && multOnly == 0);
+        bool valid_mult_only = (modeFlags == MODE_MULT_ONLY && multOnly == 1);
+
+        if (!valid_standard && !valid_mult_only) {
+            char* err = jni_make_error(JNI_ERR_INVALID_MODES,
+                                       "Classik profiles only support Standard or Multiplication-Only modes");
+            jstring retval = (*env)->NewStringUTF(env, err);
+            sfree(err);
+            return retval;
+        }
     }
 
     /* Validate mode flags for compatibility */

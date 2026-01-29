@@ -550,6 +550,7 @@ class GameViewModel(
             slotIndex = slotIndex,
             model = model,
             difficultyName = _uiState.value.difficultyName,
+            modeName = currentGameMode.name,
             profileName = currentProfile.name,
             elapsedSeconds = _uiState.value.elapsedTimeSeconds
         )
@@ -568,6 +569,7 @@ class GameViewModel(
         manager.saveAutoSave(
             model = model,
             difficultyName = _uiState.value.difficultyName,
+            modeName = currentGameMode.name,
             profileName = currentProfile.name,
             elapsedSeconds = getElapsedTimeForSave()
         )
@@ -575,11 +577,18 @@ class GameViewModel(
 
     fun loadAutoSave(): Boolean {
         val manager = saveManager ?: return false
-        val (model, elapsed, profileName) = manager.loadAutoSave()
-        if (model != null) {
+        val result = manager.loadAutoSave()
+        if (result.model != null) {
             // Restore implicit state
-            val restoredProfile = KeenProfile.fromName(profileName)
-            loadModel(model, preservedElapsedSeconds = elapsed, profile = restoredProfile)
+            val restoredProfile = KeenProfile.fromName(result.profileName)
+            val restoredMode = try {
+                GameMode.valueOf(result.modeName)
+            } catch (e: IllegalArgumentException) {
+                GameMode.STANDARD  // Fallback for old saves without mode
+            }
+            currentGameMode = restoredMode
+            loadModel(result.model, preservedElapsedSeconds = result.elapsedSeconds,
+                     gameMode = restoredMode, profile = restoredProfile)
             return true
         }
         return false
@@ -588,12 +597,18 @@ class GameViewModel(
     // Load game from slot
     fun loadFromSlot(slotIndex: Int): Boolean {
         val manager = saveManager ?: return false
-        val (model, elapsed, profileName) = manager.loadFromSlot(slotIndex)
+        val result = manager.loadFromSlot(slotIndex)
 
-        if (model != null) {
-            accumulatedTime = elapsed
-            val restoredProfile = KeenProfile.fromName(profileName)
-            loadModel(model, profile = restoredProfile)
+        if (result.model != null) {
+            accumulatedTime = result.elapsedSeconds
+            val restoredProfile = KeenProfile.fromName(result.profileName)
+            val restoredMode = try {
+                GameMode.valueOf(result.modeName)
+            } catch (e: IllegalArgumentException) {
+                GameMode.STANDARD  // Fallback for old saves without mode
+            }
+            currentGameMode = restoredMode
+            loadModel(result.model, gameMode = restoredMode, profile = restoredProfile)
             _uiState.update { it.copy(showLoadDialog = false) }
             return true
         }

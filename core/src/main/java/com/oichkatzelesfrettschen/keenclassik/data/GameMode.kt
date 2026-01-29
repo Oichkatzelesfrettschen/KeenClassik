@@ -34,23 +34,37 @@ enum class GameMode(
         cFlags = 0x00,
         phase = 1,
         implemented = true
+    ),
+
+    MULTIPLICATION_ONLY(
+        displayName = "Multiplication Only",
+        description = "Only multiplication (×) operations",
+        iconName = "close",  // × symbol as icon
+        cFlags = 0x01,      // MODE_MULT_ONLY flag
+        phase = 1,
+        implemented = true,
+        extendedTip = "All cages use multiplication only. Perfect for practicing times tables!"
     );
 
     companion object {
-        fun availableModes(profile: KeenProfile): List<GameMode> = listOf(STANDARD)
+        fun availableModes(profile: KeenProfile): List<GameMode> =
+            listOf(STANDARD, MULTIPLICATION_ONLY).filter { profile.allowsMode(it) }
 
         fun availableModes(): List<GameMode> = availableModes(KeenProfile.DEFAULT)
 
-        fun allModes(profile: KeenProfile): List<GameMode> = listOf(STANDARD)
+        fun allModes(profile: KeenProfile): List<GameMode> =
+            listOf(STANDARD, MULTIPLICATION_ONLY)
 
         fun allModes(): List<GameMode> = allModes(KeenProfile.DEFAULT)
 
         fun byPhase(phase: Int, profile: KeenProfile): List<GameMode> =
-            if (phase == 1) listOf(STANDARD) else emptyList()
+            if (phase == 1) listOf(STANDARD, MULTIPLICATION_ONLY).filter { profile.allowsMode(it) }
+            else emptyList()
 
         fun byPhase(phase: Int): List<GameMode> = byPhase(phase, KeenProfile.DEFAULT)
 
-        fun isAvailable(mode: GameMode, profile: KeenProfile): Boolean = mode == STANDARD
+        fun isAvailable(mode: GameMode, profile: KeenProfile): Boolean =
+            (mode == STANDARD || mode == MULTIPLICATION_ONLY) && profile.allowsMode(mode)
 
         fun isAvailable(mode: GameMode): Boolean = isAvailable(mode, KeenProfile.DEFAULT)
 
