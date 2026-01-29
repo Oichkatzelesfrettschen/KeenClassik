@@ -41,7 +41,7 @@ class KeenProfileTest {
             override val maxGridSize: Int = 16
         })
         val modes = GameMode.availableModes(KeenProfile.CLASSIK_MODERN)
-        assertEquals(listOf(GameMode.STANDARD), modes)
+        assertEquals(listOf(GameMode.STANDARD, GameMode.MULTIPLICATION_ONLY), modes)
     }
 
     @Test
