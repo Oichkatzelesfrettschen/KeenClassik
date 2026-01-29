@@ -1,77 +1,100 @@
-# Keen Classik for Android
+# KeenClassik
 
-A focused, classic Keen-style logic puzzle game for Android phones, tablets, and Android TV.
-This repository contains the **Classik** experience only (no Kenning/advanced modes, no ML, no story pipeline).
-For extended modes and larger grids, see the Keen Kenning repo.
+Android Keen puzzle game (KenKen-style) focused on the Classik experience with classic operators and grid sizes 3x3-9x9.
 
-## Download
+**Version**: 1.5.0
+**Package**: `com.oichkatzelesfrettschen.keenclassik`
+**License**: MIT
 
-Releases are published in this repo once Classik packaging is finalized.
+---
 
 ## Features
 
-- **Classic Mode**: Standard operations (+, -, ×, ÷)
-- **Grid Sizes**: 3×3 through 9×9
-- **Difficulty**: Easy, Normal, Hard, Extreme (0–3)
-- **Save/Load**: Multiple save slots with auto-save
-- **Accessibility**: TalkBack support, focus cues, colorblind modes
-- **Android TV**: D-pad + keyboard/gamepad navigation
-- **Dark Theme**: Persistent toggle in Settings
+- **Classic Puzzle Experience**: Grid sizes 3x3 through 9x9
+- **Difficulty Levels**: Easy, Normal, Hard, Extreme (0-3)
+- **Dual Mode Support**:
+  - **Standard Mode**: All operations (+, -, x, /)
+  - **Multiplication-Only Mode**: Practice multiplication tables
+- **Modern UI/UX**:
+  - Responsive layout using 60-70% of screen space
+  - WCAG AAA accessible (6.5:1 contrast)
+  - Dynamic clue positioning prevents overlap
+  - Responsive button and text scaling
+- **Save System**: 12 save slots + auto-save
+- **Accessibility**: TalkBack support, D-pad navigation, high contrast
+- **Native Performance**: C23/C++23 with JNI integration
 
-## Requirements
+---
 
-- Android 6.0+ (API 23)
-- APK size varies by ABI and assets
+## Building
 
-## Building from Source
+### Requirements
 
-### Prerequisites
-- **JDK 21** (required by Gradle 8.13)
-- **Android SDK** API 36
-- **Android NDK** 27.2.12479018
-- **CMake** 3.22.1+ (C23)
+- **JDK**: 21 (Gradle 8.13 compatibility)
+- **Android SDK**: API 36
+- **NDK**: 27.2.12479018 (side-by-side)
+- **CMake**: 3.22.1+ (via Android SDK)
 
 ### Build Commands
+
 ```bash
-# Clean build (strict warnings-as-errors)
-./gradlew clean assembleDebug
-
-# Unit tests (JUnit/Robolectric)
-./gradlew testDebugUnitTest
-
-# Instrumented tests
-./gradlew connectedDebugAndroidTest
+# Debug build
+./gradlew assembleDebug
 
 # Release build
 ./gradlew assembleRelease
+
+# Run unit tests
+./gradlew testDebugUnitTest
+
+# Run instrumented tests (requires device/emulator)
+./gradlew connectedDebugAndroidTest
+
+# Lint check
+./gradlew lintDebug
 ```
 
-> This project uses `allWarningsAsErrors = true`. Any warning fails the build.
-
-Outputs: `app/build/outputs/apk/debug/` and `app/build/outputs/apk/release/`.
+---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Compose UI Layer                         │
-│  GameScreen.kt • MenuScreen.kt • VictoryAnimation.kt        │
-├─────────────────────────────────────────────────────────────┤
-│                   ViewModel Layer                           │
-│  GameViewModel.kt • GameUiState.kt • SaveManager.kt         │
-├─────────────────────────────────────────────────────────────┤
-│                  Integration Layer                          │
-│  KeenModelBuilder.java • PuzzleRepository.kt                │
-├─────────────────────────────────────────────────────────────┤
-│                    Native Layer (C)                         │
-│  keen.c • keen-android-jni.c • keen_solver.c                │
-└─────────────────────────────────────────────────────────────┘
+UI (Compose) -> ViewModel -> Repository -> JNI Bridge -> Native C Layer
+                    |
+                    +-> SaveManager (Persistence)
 ```
 
-## Known Issues
+### Key Components
 
-- First launch may take a second or two on low-end devices.
+- **GameMode**: Enum defining puzzle modes (STANDARD, MULTIPLICATION_ONLY)
+- **KeenProfile**: Grid size and difficulty constraints (Classik: 3-9, 0-3)
+- **PuzzleRepository**: Puzzle generation interface
+- **SaveManager**: 12-slot save system with auto-save
+- **Native Layer**: Puzzle generation, Latin square solving, DLX algorithm
+
+---
+
+## Testing
+
+### Test Coverage
+
+- **Unit Tests**: 45 tests (GameMode, PuzzleRepository, Layout)
+- **Instrumented Tests**: 10+ tests (MultiplicationOnlyInvariant)
+- **Manual Tests**: 17 documented test cases
+
+See [docs/MANUAL_TEST_PLAN.md](docs/MANUAL_TEST_PLAN.md) for details.
+
+---
 
 ## License
 
-MIT. See `LICENSE` and `THIRD_PARTY_LICENSES`.
+MIT License - see [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2024-2026 KeenKenning Contributors
+
+---
+
+## Links
+
+- **Repository**: https://github.com/Oichkatzelesfrettschen/KeenClassik
+- **Issues**: https://github.com/Oichkatzelesfrettschen/KeenClassik/issues
