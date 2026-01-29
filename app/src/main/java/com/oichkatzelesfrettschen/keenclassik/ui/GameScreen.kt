@@ -32,6 +32,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
+import com.oichkatzelesfrettschen.keenclassik.data.GameMode
 import com.oichkatzelesfrettschen.keenclassik.data.SaveSlotInfo
 import androidx.compose.material3.*
 import androidx.compose.material3.HorizontalDivider
